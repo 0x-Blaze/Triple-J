@@ -1,0 +1,79 @@
+---
+title: "activity"
+author: "Triple J"
+date: "2025-12-12"
+output: html_document
+---
+Step 1: Define exposure and outcome, where belief is the outcome and physical and mental health are the exposures.
+
+Step 2: Data Cleaning
+
+```{r cleaning, include=FALSE}
+# reading into data files
+library(readxl)
+data.a <- read_excel("A.xlsx")
+data.b <- read_excel("B.xlsx")
+data.p <- read_excel("P.xlsx")
+data.se <- read_excel("SouthEast.xlsx")
+data.our <- read_excel("our data.xlsx")
+```
+
+```{r changing column names}
+# renaming columns to match the rest of data so they merge 
+colnames(data.our)[1] <- "ID"
+colnames(data.our)[5] <- "PH"
+colnames(data.our)[6] <- "MH"
+colnames(data.our)[7] <- "Smoker"
+colnames(data.se)[2] <- "PH"
+colnames(data.se)[3] <- "MH"
+```
+
+```{r }
+data.se$ID <- NULL # deleting ID
+
+data <- rbind(data.a, data.b, data.p, data.se) # binding four datasets (A, B, P, SouthEast)
+
+# deleting more columns
+data$SES5 <- NULL
+data$Region <- NULL
+data.our$ID <- NULL
+data <- rbind(data, data.our)
+
+# changing level names
+data$Smoker <- ifelse(data$Smoker == "Current", "Y", data$Smoker)
+data$PH <- ifelse(data$PH == "Yes", "Y", data$PH)
+data$PH <- ifelse(data$PH == "YES", "Y", data$PH)
+data$PH <- ifelse(data$PH == "No", "N", data$PH)
+data$PH <- ifelse(data$PH == "NO", "N", data$PH)
+
+data$Gender <- ifelse(data$Gender == "PNTS", NA, data$Gender)
+data$Gender <- ifelse(data$Gender == "GD", NA, data$Gender)
+
+
+str(data)
+# changing PH, MH, Gender, Smoker, Belief into factor and age into numeric
+data$PH <- as.factor(data$PH)
+data$MH <- as.factor(data$MH)
+data$Gender <- as.factor(data$Gender)
+data$Smoker <- as.factor(data$Smoker)
+data$Belief <- as.factor(data$Belief)
+data$Age <- as.numeric(data$Age)
+
+# deleting participants under 18 years old
+data <- data[data$Age>= 18, ]
+
+# deleting NAs for PH, MH, Belief columns
+data <- data[!is.na(data$PH),]
+data <- data[!is.na(data$MH),]
+data <- data[!is.na(data$Belief),]
+summary(data)
+```
+Step 3: Analysis
+```{r fitting the model}
+mdl0 <- glm(Belief ~ 1, data, family ="binomial")
+mdl1 <- glm(Belief ~ PH + MH, data, family="binomial")
+anova(mdl0, mdl1)
+# not significant 
+```
+
+
