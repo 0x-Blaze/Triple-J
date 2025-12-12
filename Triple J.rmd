@@ -8,7 +8,7 @@ output: html_document
 # Introduction
 
 ```{r data imports}
-install.packages("readxl")
+
 library(readxl)
 
 data1 <- read_excel("data import/Q1_data.xlsx")
@@ -16,7 +16,10 @@ data1 <- read_excel("data import/Q1_data.xlsx")
 View(data1)
 
 str(data1)
+```
 
+# Data Cleaning
+```{r data cleaning}
 data1$ID <- as.factor(data1$ID) # convert ID to factor
 data1$Consent <- as.factor(data1$Consent) # convert consent to factor
 
@@ -34,7 +37,10 @@ data1$Sex[data1$Sex == "f"] <- "F"
 #remove people who did not consent
 data1 <- subset(data1, Consent == "0")
 
+```
 
+# Export Cleaned Data
+```{r data export}
 View(data1)
 
 write.csv(data1, "data export/Q1_data_cleaned.csv", row.names = FALSE)
