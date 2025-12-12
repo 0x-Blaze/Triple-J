@@ -3,3 +3,18 @@ Make changes here
 Alice has finished me. #sob
 
 John is annoying. #angryface
+
+----
+author: "Group work - Team Triple J"
+title: "Triple J Trial and Error"
+date: "December 12, 2025"
+output: html_document
+----
+
+# Introduction
+
+```{r}
+install.packages("readxlsx")
+library(readxlsx)
+
+```
