@@ -8,7 +8,10 @@ output: html_document
 # Introduction
 
 ```{r}
-install.packages("readxlsx")
-library(readxlsx)
+install.packages("readxl")
+library(readxl)
+
+data <- read_excel("data import/Q1_data.xlsx")
+
 
 ```
