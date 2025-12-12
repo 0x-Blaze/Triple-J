@@ -11,7 +11,9 @@ output: html_document
 install.packages("readxl")
 library(readxl)
 
-data <- read_excel("data import/Q1_data.xlsx")
+data1 <- read_excel("data import/Q1_data.xlsx")
+
+View(data1)
 
 
 ```
